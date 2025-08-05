@@ -8,12 +8,8 @@
  */
 import { NAV_ITEMS, COLOR_THEMES, AVATAR_LIST, WING_CHUN_TRAINING, CONDITIONING_TRAINING, GREAT_MASTERS_DATA, THEORY_DATA, GLOSSARY_DATA, BELT_SYSTEM, ACHIEVEMENTS } from './data.js';
 
-// Objeto para guardar referências aos elementos do DOM para acesso rápido.
 const elements = {};
 
-/**
- * Mapeia todos os elementos HTML necessários para variáveis no objeto `elements`.
- */
 function queryElements() {
     const els = {
         navHub: document.getElementById('navigation-hub'),
@@ -75,53 +71,20 @@ function queryElements() {
         statTotalTime: document.getElementById('stat-total-time'),
         statFavExercise: document.getElementById('stat-fav-exercise'),
         xpChartCanvas: document.getElementById('xp-chart'),
-        onboardingModal: document.getElementById('onboarding-modal'),
-        onboardingTitle: document.getElementById('onboarding-title'),
-        onboardingText: document.getElementById('onboarding-text'),
-        onboardingPrevBtn: document.getElementById('onboarding-prev-btn'),
-        onboardingNextBtn: document.getElementById('onboarding-next-btn'),
-        onboardingDots: document.getElementById('onboarding-dots'),
-        profileTabBtns: document.querySelectorAll('#seccao-perfil .profile-tab-btn'),
-        profileTabPanes: document.querySelectorAll('#seccao-perfil .profile-tab-pane'),
-        planosTabBtns: document.querySelectorAll('#seccao-planos .profile-tab-btn'),
-        planosTabPanes: document.querySelectorAll('#seccao-planos .profile-tab-pane'),
-        glossaryTabBtns: document.querySelectorAll('#seccao-glossario .profile-tab-btn'),
-        glossaryTabPanes: document.querySelectorAll('#seccao-glossario .profile-tab-pane'),
         themePickerContainer: document.getElementById('theme-picker-container'),
-        planExecutionModal: document.getElementById('plan-execution-modal'),
-        planExecutionTitle: document.getElementById('plan-execution-title'),
-        planExecutionTimerDisplay: document.getElementById('plan-execution-timer-display'),
-        planExecutionProgressBar: document.getElementById('plan-execution-progress-bar'),
-        planExecutionCurrentExercise: document.getElementById('plan-execution-current-exercise'),
-        planExecutionPhaseInfo: document.getElementById('plan-execution-phase-info'),
     };
-    // Copia as propriedades para o objeto `elements` global do módulo.
     Object.assign(elements, els);
 }
 
-/**
- * O objeto principal que encapsula toda a lógica de gestão da UI.
- */
 export const uiManager = {
-    /**
-     * Inicializa o módulo, começando por mapear os elementos do DOM.
-     */
     init() {
         queryElements();
     },
 
-    /**
-     * Retorna o objeto com as referências aos elementos do DOM.
-     * @returns {object}
-     */
     getElements() {
         return elements;
     },
     
-    /**
-     * Renderiza todo o conteúdo estático da aplicação que não muda com frequência.
-     * @param {object|null} profile - O perfil do utilizador para verificações de nível.
-     */
     renderAllStaticContent(profile) {
         this.renderAvatarChoices(profile);
         this.renderSkillLibrary(profile);
@@ -133,11 +96,6 @@ export const uiManager = {
         this.renderAchievements(profile);
     },
 
-    /**
-     * Atualiza toda a interface do utilizador com base no perfil atual.
-     * @param {object} userProfile - O perfil do utilizador.
-     * @param {function} getBeltByLevel - Função para obter os detalhes de um cinturão.
-     */
     updateUI(userProfile, getBeltByLevel) {
         if (!userProfile) {
             elements.userStatusDisplay.style.display = 'none';
@@ -186,25 +144,14 @@ export const uiManager = {
         this.renderNavigation(userProfile);
         this.updateStaminaBar(userProfile.stamina, userProfile.maxStamina);
         
-        // Re-renderiza conteúdo que depende do nível do utilizador
         this.renderAllStaticContent(userProfile);
     },
 
-    /**
-     * Atualiza a barra de energia na interface.
-     * @param {number} current - Energia atual.
-     * @param {number} max - Energia máxima.
-     */
     updateStaminaBar(current, max) {
         elements.staminaBarText.textContent = `⚡ ${Math.floor(current)} / ${max}`;
         elements.staminaBarFill.style.width = `${(current / max) * 100}%`;
     },
 
-    /**
-     * Mostra ou esconde a vista de criação/edição de perfil.
-     * @param {boolean} show - Se deve mostrar o formulário.
-     * @param {object|null} profile - O perfil do utilizador para preencher os campos (opcional).
-     */
     toggleProfileForm(show, profile = null) {
         elements.perfilFormView.style.display = show ? 'block' : 'none';
         elements.perfilDashboardView.style.display = show ? 'none' : 'block';
@@ -216,10 +163,6 @@ export const uiManager = {
         }
     },
 
-    /**
-     * Renderiza os botões de navegação na barra lateral.
-     * @param {object|null} userProfile - O perfil do utilizador para verificar notificações.
-     */
     renderNavigation(userProfile) {
         const navContainer = elements.navHub;
         navContainer.innerHTML = '';
@@ -243,10 +186,6 @@ export const uiManager = {
         });
     },
     
-    /**
-     * Renderiza as opções de avatares no formulário de perfil.
-     * @param {object|null} profile - O perfil do utilizador para verificar os avatares desbloqueados.
-     */
     renderAvatarChoices(profile) {
         const grid = elements.avatarChoicesGrid;
         if (!grid) return;
@@ -270,12 +209,6 @@ export const uiManager = {
         });
     },
 
-    /**
-     * Cria o HTML para um cartão de exercício.
-     * @param {object} item - O objeto do exercício.
-     * @param {boolean} isLocked - Se o exercício está bloqueado.
-     * @returns {string} O HTML do cartão.
-     */
     createTimerCard(item, isLocked) {
         const lockIcon = isLocked ? '<span class="lock-icon">🔒</span>' : '';
         const videoButton = item.videoUrl ? `<button class="action-button video-btn" data-video-url="${item.videoUrl}" data-title="${item.title}" ${isLocked ? 'disabled' : ''}>Ver Vídeo</button>` : '';
@@ -301,12 +234,6 @@ export const uiManager = {
         `;
     },
     
-    /**
-     * Renderiza uma lista de exercícios numa categoria.
-     * @param {HTMLElement} container - O elemento onde a lista será renderizada.
-     * @param {object} categoryData - Os dados da categoria de exercícios.
-     * @param {object|null} profile - O perfil do utilizador.
-     */
     renderLibraryList(container, categoryData, profile) {
         const userLevel = profile ? profile.unlockedBeltLevel : 0;
         container.innerHTML = '';
@@ -447,11 +374,12 @@ export const uiManager = {
         };
         
         elements.glossaryContainerCinto.innerHTML = renderCategory(GLOSSARY_DATA);
-        elements.glossaryContainerGlobal.innerHTML = renderCategory(GLOSSARY_DATA); // Simplificado, poderia ter lógica diferente
+        elements.glossaryContainerGlobal.innerHTML = renderCategory(GLOSSARY_DATA);
     },
 
     renderAchievements(profile) {
         const grid = elements.achievementsGrid;
+        if (!grid) return;
         grid.innerHTML = '';
         const userAchievements = profile ? profile.achievements : [];
 
@@ -470,11 +398,69 @@ export const uiManager = {
         }
     },
 
-    /**
-     * Mostra uma notificação no ecrã.
-     * @param {string} text - O texto da notificação.
-     * @param {string} icon - O ícone a ser exibido.
-     */
+    updateTimerDisplay(timerId, secondsRemaining) {
+        const card = document.getElementById(`timer-${timerId}`);
+        if (card) {
+            const display = card.querySelector('.timer-display');
+            if (display) display.textContent = `${secondsRemaining}s`;
+        }
+    },
+
+    setTimerProgress(timerId, percentage) {
+        const card = document.getElementById(`timer-${timerId}`);
+        if (card) {
+            const circle = card.querySelector('.timer-progress-ring__circle');
+            if (circle) {
+                const radius = circle.r.baseVal.value;
+                const circumference = radius * 2 * Math.PI;
+                const offset = circumference - (percentage / 100) * circumference;
+                circle.style.strokeDasharray = `${circumference} ${circumference}`;
+                circle.style.strokeDashoffset = offset;
+            }
+        }
+    },
+
+    showStopButton(timerId) {
+        const card = document.getElementById(`timer-${timerId}`);
+        if (card) {
+            card.querySelector('.start-btn').style.display = 'none';
+            card.querySelector('.stop-btn').style.display = 'inline-block';
+        }
+    },
+
+    // CORREÇÃO: A função agora aceita a duração original para resetar corretamente.
+    resetTimerCard(timerId, originalDuration) {
+        const card = document.getElementById(`timer-${timerId}`);
+        if (card) {
+            card.querySelector('.start-btn').style.display = 'inline-block';
+            card.querySelector('.stop-btn').style.display = 'none';
+            this.updateTimerDisplay(timerId, originalDuration);
+            this.setTimerProgress(timerId, 0);
+        }
+    },
+    
+    showVideoModal(url, title) {
+        if (elements.modal) {
+            elements.modalTitle.textContent = title;
+            elements.modalVideoContainer.innerHTML = `<iframe src="${url}?autoplay=1&modestbranding=1&rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+            elements.modal.style.display = 'flex';
+        }
+    },
+
+    hideVideoModal() {
+        if (elements.modal) {
+            elements.modal.style.display = 'none';
+            elements.modalVideoContainer.innerHTML = '';
+        }
+    },
+    
+    toggleMobileMenu(show) {
+        if (elements.appSidebar && elements.mobileMenuOverlay) {
+            elements.appSidebar.classList.toggle('open', show);
+            elements.mobileMenuOverlay.classList.toggle('visible', show);
+        }
+    },
+
     showNotification(text, icon = 'ℹ️') {
         const notification = elements.notificationEl;
         elements.notificationIcon.textContent = icon;
@@ -483,7 +469,7 @@ export const uiManager = {
         notification.classList.remove('hidden');
         notification.style.display = 'flex';
         notification.style.animation = 'none';
-        void notification.offsetWidth; // Trigger reflow
+        void notification.offsetWidth;
         notification.style.animation = 'slideInDown 0.5s forwards, fadeOut 0.5s 3.5s forwards';
         
         setTimeout(() => {
@@ -491,20 +477,12 @@ export const uiManager = {
         }, 4000);
     },
 
-    /**
-     * Aplica o tema de cores selecionado à aplicação.
-     * @param {string} themeKey - A chave do tema (ex: 'default', 'ocean').
-     */
     applyTheme(themeKey) {
         const theme = COLOR_THEMES[themeKey] || COLOR_THEMES['default'];
         document.documentElement.style.setProperty('--cor-primaria', theme.primary);
         document.documentElement.style.setProperty('--cor-secundaria', theme.secondary);
     },
 
-    /**
-     * Renderiza o seletor de temas no perfil.
-     * @param {string} currentThemeKey - A chave do tema atual.
-     */
     renderThemePicker(currentThemeKey) {
         const container = elements.themePickerContainer.querySelector('.theme-options');
         container.innerHTML = '';

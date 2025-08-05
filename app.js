@@ -7,7 +7,8 @@
  * - Gere o estado geral da aplicação, como a secção ativa.
  */
 
-import { BELT_SYSTEM, NAV_ITEMS } from './data.js';
+// CORREÇÃO: Importa todos os itens de treino para fácil acesso.
+import { BELT_SYSTEM, NAV_ITEMS, ALL_TRAINING_ITEMS } from './data.js';
 import { profileManager } from './profileManager.js';
 import { uiManager } from './uiManager.js';
 import { trainingManager } from './trainingManager.js';
@@ -29,7 +30,6 @@ const WingChunApp = {
         
         this.addEventListeners();
         
-        // CORREÇÃO: Renderiza todo o conteúdo estático no arranque.
         uiManager.renderAllStaticContent(profile);
         
         if (profile) {
@@ -42,6 +42,7 @@ const WingChunApp = {
     },
     
     addEventListeners() {
+        // Listeners estáticos (não mudam)
         const guardarPerfilBtn = document.getElementById('guardarPerfilBtn');
         if (guardarPerfilBtn) {
             guardarPerfilBtn.addEventListener('click', () => this.handleSaveProfile());
@@ -64,22 +65,114 @@ const WingChunApp = {
             importFileInput.addEventListener('change', (e) => this.handleImportFile(e));
         }
 
-        this.elements.navHub.addEventListener('click', (e) => {
-            const navButton = e.target.closest('.nav-button');
-            if (navButton) {
-                this.mostrarSeccao(navButton.dataset.seccao);
-            }
-        });
-
+        // Menu móvel
         this.elements.openMenuBtn.addEventListener('click', () => uiManager.toggleMobileMenu(true));
         this.elements.closeMenuBtn.addEventListener('click', () => uiManager.toggleMobileMenu(false));
         this.elements.mobileMenuOverlay.addEventListener('click', () => uiManager.toggleMobileMenu(false));
 
+        // Navegação principal
+        this.elements.navHub.addEventListener('click', (e) => {
+            const navButton = e.target.closest('.nav-button');
+            if (navButton) {
+                this.mostrarSeccao(navButton.dataset.seccao);
+                uiManager.toggleMobileMenu(false); // Fecha o menu ao navegar
+            }
+        });
+
+        // Seleção de Avatar no formulário
+        if (this.elements.avatarChoicesGrid) {
+            this.elements.avatarChoicesGrid.addEventListener('click', (e) => {
+                const target = e.target.closest('.avatar-choice:not(.locked)');
+                if (!target) return;
+                
+                const selected = this.elements.avatarChoicesGrid.querySelector('.selected');
+                if(selected) selected.classList.remove('selected');
+
+                target.classList.add('selected');
+                this.state.selectedAvatar = target.dataset.avatarId;
+                
+                if(this.elements.formAvatarPreview) {
+                    this.elements.formAvatarPreview.src = target.src;
+                }
+            });
+        }
+
+        // CORREÇÃO: Listener delegado para todo o conteúdo dinâmico
+        this.elements.mainContentArea.addEventListener('click', (e) => {
+            const target = e.target;
+
+            // Botões dos cartões de treino
+            const startBtn = target.closest('.start-btn:not(:disabled)');
+            if (startBtn) {
+                const itemId = startBtn.dataset.itemId;
+                const item = ALL_TRAINING_ITEMS.find(i => i.id === itemId);
+                if (item) {
+                    trainingManager.startTimer(item);
+                    uiManager.showStopButton(itemId);
+                }
+                return;
+            }
+
+            const stopBtn = target.closest('.stop-btn');
+            if (stopBtn) {
+                const itemId = stopBtn.dataset.itemId;
+                const item = ALL_TRAINING_ITEMS.find(i => i.id === itemId);
+                if (item) {
+                    trainingManager.stopTimer(item, true);
+                }
+                return;
+            }
+            
+            const videoBtn = target.closest('.video-btn:not(:disabled)');
+            if (videoBtn) {
+                uiManager.showVideoModal(videoBtn.dataset.videoUrl, videoBtn.dataset.title);
+                return;
+            }
+
+            // Acordeões (Cinturões e Condicionamento)
+            const accordionHeader = target.closest('.belt-accordion-header, .conditioning-accordion-header');
+            if (accordionHeader) {
+                accordionHeader.parentElement.classList.toggle('active');
+                return;
+            }
+            
+            // Abas (Perfil, Planos, etc.)
+            const tabBtn = target.closest('.profile-tab-btn');
+            if (tabBtn && !tabBtn.classList.contains('active')) {
+                this.handleTabClick(tabBtn);
+                return;
+            }
+            
+            // Cartões dos Mestres (Flip)
+            const flipCard = target.closest('.master-flip-card');
+            if (flipCard && typeof gsap !== 'undefined') {
+                const cardInner = flipCard.querySelector('.master-flip-card-inner');
+                const isFlipped = cardInner.style.transform.includes('rotateY(180deg)');
+                gsap.to(cardInner, {
+                    rotationY: isFlipped ? 0 : 180,
+                    duration: 0.7,
+                    ease: 'power3.inOut'
+                });
+                return;
+            }
+        });
+        
+        // Fechar o modal de vídeo
+        if (this.elements.modal) {
+            this.elements.modal.addEventListener('click', (e) => {
+                if (e.target === this.elements.modal || e.target.closest('.close-modal')) {
+                    uiManager.hideVideoModal();
+                }
+            });
+        }
+        
+        // Listener para o seletor de temas (já existia, mas movido para consistência)
         const themePickerContainer = document.getElementById('theme-picker-container');
         if(themePickerContainer) {
             themePickerContainer.addEventListener('click', (e) => {
-                if (e.target.classList.contains('theme-dot')) {
-                    const themeKey = e.target.dataset.themeKey;
+                const themeDot = e.target.closest('.theme-dot');
+                if (themeDot) {
+                    const themeKey = themeDot.dataset.themeKey;
                     const profile = profileManager.getProfile();
                     if (profile) {
                         profile.theme = themeKey;
@@ -87,27 +180,6 @@ const WingChunApp = {
                         uiManager.applyTheme(themeKey);
                         uiManager.renderThemePicker(themeKey);
                     }
-                }
-            });
-        }
-        
-        // Adiciona um event listener para a seleção de avatares
-        if (this.elements.avatarChoicesGrid) {
-            this.elements.avatarChoicesGrid.addEventListener('click', (e) => {
-                const target = e.target.closest('.avatar-choice:not(.locked)');
-                if (!target) return;
-                
-                // Remove a seleção anterior
-                const selected = this.elements.avatarChoicesGrid.querySelector('.selected');
-                if(selected) selected.classList.remove('selected');
-
-                // Adiciona a nova seleção
-                target.classList.add('selected');
-                this.state.selectedAvatar = target.dataset.avatarId;
-                
-                // Atualiza a pré-visualização
-                if(this.elements.formAvatarPreview) {
-                    this.elements.formAvatarPreview.src = target.src;
                 }
             });
         }
@@ -184,6 +256,26 @@ const WingChunApp = {
         };
         reader.readAsText(file);
         event.target.value = '';
+    },
+    
+    // CORREÇÃO: Nova função para gerir a troca de abas
+    handleTabClick(tabButton) {
+        const tabContainer = tabButton.closest('.profile-tabs');
+        const contentContainer = tabContainer.nextElementSibling;
+
+        if (tabContainer.querySelector('.active')) {
+            tabContainer.querySelector('.active').classList.remove('active');
+        }
+        if (contentContainer.querySelector('.active')) {
+            contentContainer.querySelector('.active').classList.remove('active');
+        }
+
+        tabButton.classList.add('active');
+        const newPaneId = `tab-pane-${tabButton.dataset.tab}`;
+        const newPane = contentContainer.querySelector(`#${newPaneId}`);
+        if (newPane) {
+            newPane.classList.add('active');
+        }
     },
 
     mostrarSeccao(idSeccao) {

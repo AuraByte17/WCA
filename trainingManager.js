@@ -11,18 +11,21 @@
 let uiManager, profileManager;
 let audioSynth = null;
 const activeTimers = {};
-let currentPlan = null;
 
 /**
  * Inicializa o sintetizador de áudio usando Tone.js.
+ * É chamado uma vez quando o utilizador interage com a página.
  */
 function initAudio() {
     if (Tone.context.state !== 'running') {
-        Tone.start();
-    }
-    if (!audioSynth) {
+        Tone.start().then(() => {
+            if (!audioSynth) {
+                audioSynth = new Tone.Synth().toDestination();
+                console.log("Contexto de áudio iniciado pelo Training Manager.");
+            }
+        });
+    } else if (!audioSynth) {
         audioSynth = new Tone.Synth().toDestination();
-        console.log("Contexto de áudio iniciado pelo Training Manager.");
     }
 }
 
@@ -35,7 +38,6 @@ export const trainingManager = {
     init(ui, profile) {
         uiManager = ui;
         profileManager = profile;
-        // O áudio é iniciado com a primeira interação do utilizador no app.js
         document.body.addEventListener('click', initAudio, { once: true });
         document.body.addEventListener('touchend', initAudio, { once: true });
     },
@@ -43,34 +45,39 @@ export const trainingManager = {
     /**
      * Inicia um temporizador para um exercício individual.
      * @param {object} item - O objeto do exercício.
-     * @param {number} duration - A duração do exercício em segundos.
      */
-    startTimer(item, duration) {
+    startTimer(item) {
         if (!profileManager.consumeStamina(item.staminaCost)) {
             uiManager.showNotification("Energia insuficiente!", "⚡");
             return;
         }
 
         const timerId = item.id;
-        if (activeTimers[timerId] || !audioSynth) return;
+        if (activeTimers[timerId]) return; // Já está a correr
 
-        audioSynth.triggerAttackRelease('C5', '8n', Tone.now());
+        if (audioSynth) audioSynth.triggerAttackRelease('C5', '8n', Tone.now());
         
         // A UI é atualizada no uiManager, que será chamado a partir do app.js
-        // uiManager.showStopButton(timerId); 
+        uiManager.showStopButton(timerId); 
 
-        let secondsElapsed = 0;
-        const totalDuration = duration;
+        let secondsRemaining = item.duration;
+        const totalDuration = item.duration;
+        
+        uiManager.updateTimerDisplay(timerId, secondsRemaining);
+        uiManager.setTimerProgress(timerId, 0);
 
         const interval = setInterval(() => {
-            secondsElapsed++;
-            uiManager.updateTimerDisplay(timerId, secondsElapsed);
-            uiManager.setTimerProgress(timerId, (secondsElapsed / totalDuration) * 100);
+            secondsRemaining--;
+            const elapsed = totalDuration - secondsRemaining;
+            uiManager.updateTimerDisplay(timerId, secondsRemaining);
+            uiManager.setTimerProgress(timerId, (elapsed / totalDuration) * 100);
 
-            if (secondsElapsed >= totalDuration) {
+            if (secondsRemaining <= 0) {
+                // Treino concluído com sucesso
                 profileManager.addXp(item.xp, item.id);
                 if(audioSynth) audioSynth.triggerAttackRelease('G5', '4n', Tone.now());
-                this.stopTimer(item, false, duration);
+                uiManager.showNotification(`+${item.xp} XP! Treino concluído.`, "🎉");
+                this.stopTimer(item, false); // Não foi cancelado pelo utilizador
             }
         }, 1000);
 
@@ -81,40 +88,38 @@ export const trainingManager = {
      * Para um temporizador de exercício.
      * @param {object} item - O objeto do exercício.
      * @param {boolean} userCancelled - Se o utilizador parou o temporizador manualmente.
-     * @param {number} duration - A duração total do exercício.
      */
-    stopTimer(item, userCancelled, duration) {
+    stopTimer(item, userCancelled) {
         const timerId = item.id;
         const timer = activeTimers[timerId];
         if (!timer) return;
 
-        if (audioSynth && userCancelled) audioSynth.triggerAttackRelease('C4', '8n', Tone.now());
-
         clearInterval(timer.interval);
-        
-        const durationSeconds = Math.round((Date.now() - timer.startTime) / 1000);
-        
+
         if (userCancelled) {
+            if (audioSynth) audioSynth.triggerAttackRelease('C4', '8n', Tone.now());
+            
+            const elapsedSeconds = Math.round((Date.now() - timer.startTime) / 1000);
             let xpGained = 0;
-            const totalDuration = duration || item.duration;
-            const tier1 = totalDuration * 0.33;
-            const tier2 = totalDuration * 0.66;
+            const totalDuration = item.duration;
             
-            if (durationSeconds >= tier2) xpGained = Math.round(item.xp * 0.6);
-            else if (durationSeconds >= tier1) xpGained = Math.round(item.xp * 0.3);
+            // Recompensa parcial se cancelado
+            if (elapsedSeconds >= totalDuration * 0.75) {
+                xpGained = Math.round(item.xp * 0.5);
+            } else if (elapsedSeconds >= totalDuration * 0.4) {
+                xpGained = Math.round(item.xp * 0.25);
+            }
             
-            profileManager.addXp(xpGained, item.id);
+            if (xpGained > 0) {
+                profileManager.addXp(xpGained, item.id);
+                uiManager.showNotification(`+${xpGained} XP! Treino interrompido.`, "👍");
+            } else {
+                uiManager.showNotification("Treino interrompido.", "❌");
+            }
         }
         
-        // profileManager.updateTrainingStats(item.id, durationSeconds);
         delete activeTimers[timerId];
-        uiManager.resetTimerCard(timerId);
-
-        if (userCancelled) {
-            uiManager.showNotification("Treino interrompido.", "❌");
-        }
+        // CORREÇÃO: Passa a duração original para o reset
+        uiManager.resetTimerCard(timerId, item.duration);
     },
-
-    // ... A lógica para startTrainingPlan, stopTrainingPlan, etc., seria movida para aqui
-    // de forma semelhante, interagindo com os outros módulos.
 };
