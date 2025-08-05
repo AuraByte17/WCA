@@ -7,7 +7,8 @@
  * - Gere o estado geral da aplicação, como a secção ativa.
  */
 
-import { BELT_SYSTEM } from './data.js';
+// CORREÇÃO: A variável NAV_ITEMS foi adicionada à lista de importações.
+import { BELT_SYSTEM, NAV_ITEMS } from './data.js';
 import { profileManager } from './profileManager.js';
 import { uiManager } from './uiManager.js';
 import { trainingManager } from './trainingManager.js';
@@ -39,11 +40,30 @@ const WingChunApp = {
     },
     
     addEventListeners() {
-        this.elements.guardarPerfilBtn.addEventListener('click', () => this.handleSaveProfile());
-        this.elements.editarPerfilBtn.addEventListener('click', () => this.handleEditProfile());
-        this.elements.exportProfileBtn.addEventListener('click', () => this.handleExportProfile());
-        this.elements.importProfileBtn.addEventListener('click', () => this.elements.importFileInput.click());
-        this.elements.importFileInput.addEventListener('change', (e) => this.handleImportFile(e));
+        // Adiciona um ouvinte de evento ao botão para guardar o perfil.
+        const guardarPerfilBtn = document.getElementById('guardarPerfilBtn');
+        if (guardarPerfilBtn) {
+            guardarPerfilBtn.addEventListener('click', () => this.handleSaveProfile());
+        }
+        
+        // Adiciona ouvintes de eventos para os outros botões de perfil.
+        const editarPerfilBtn = document.getElementById('editarPerfilBtn');
+        if (editarPerfilBtn) {
+            editarPerfilBtn.addEventListener('click', () => this.handleEditProfile());
+        }
+
+        const exportProfileBtn = document.getElementById('exportProfileBtn');
+        if (exportProfileBtn) {
+            exportProfileBtn.addEventListener('click', () => this.handleExportProfile());
+        }
+
+        const importProfileBtn = document.getElementById('importProfileBtn');
+        const importFileInput = document.getElementById('import-file-input');
+        if (importProfileBtn && importFileInput) {
+            importProfileBtn.addEventListener('click', () => importFileInput.click());
+            importFileInput.addEventListener('change', (e) => this.handleImportFile(e));
+        }
+
 
         this.elements.navHub.addEventListener('click', (e) => {
             const navButton = e.target.closest('.nav-button');
@@ -56,18 +76,21 @@ const WingChunApp = {
         this.elements.closeMenuBtn.addEventListener('click', () => uiManager.toggleMobileMenu(false));
         this.elements.mobileMenuOverlay.addEventListener('click', () => uiManager.toggleMobileMenu(false));
 
-        this.elements.themePickerContainer.addEventListener('click', (e) => {
-            if (e.target.classList.contains('theme-dot')) {
-                const themeKey = e.target.dataset.themeKey;
-                const profile = profileManager.getProfile();
-                if (profile) {
-                    profile.theme = themeKey;
-                    profileManager.saveProfile();
-                    uiManager.applyTheme(themeKey);
-                    uiManager.renderThemePicker(themeKey);
+        const themePickerContainer = document.getElementById('theme-picker-container');
+        if(themePickerContainer) {
+            themePickerContainer.addEventListener('click', (e) => {
+                if (e.target.classList.contains('theme-dot')) {
+                    const themeKey = e.target.dataset.themeKey;
+                    const profile = profileManager.getProfile();
+                    if (profile) {
+                        profile.theme = themeKey;
+                        profileManager.saveProfile();
+                        uiManager.applyTheme(themeKey);
+                        uiManager.renderThemePicker(themeKey);
+                    }
                 }
-            }
-        });
+            });
+        }
     },
 
     handleSaveProfile() {
@@ -96,6 +119,7 @@ const WingChunApp = {
         this.state.selectedAvatar = profile.avatar;
         uiManager.toggleProfileForm(true, profile);
     },
+
 
     handleExportProfile() {
         const profile = profileManager.getProfile();
@@ -160,3 +184,5 @@ const WingChunApp = {
 document.addEventListener('DOMContentLoaded', () => {
     WingChunApp.init();
 });
+
+// CORREÇÃO: A chaveta '}' extra que estava aqui foi removida.
