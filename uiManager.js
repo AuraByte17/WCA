@@ -6,7 +6,7 @@
  * - Gere a exibição de modais, notificações e a navegação entre as abas.
  * - É chamado pelos outros módulos para refletir as mudanças de estado no ecrã.
  */
-import { NAV_ITEMS, COLOR_THEMES, AVATAR_LIST, ALL_TRAINING_ITEMS, GREAT_MASTERS_DATA, THEORY_DATA, GLOSSARY_DATA, BELT_SYSTEM } from './data.js';
+import { NAV_ITEMS, COLOR_THEMES, AVATAR_LIST, WING_CHUN_TRAINING, CONDITIONING_TRAINING, GREAT_MASTERS_DATA, THEORY_DATA, GLOSSARY_DATA, BELT_SYSTEM, ACHIEVEMENTS } from './data.js';
 
 // Objeto para guardar referências aos elementos do DOM para acesso rápido.
 const elements = {};
@@ -117,6 +117,21 @@ export const uiManager = {
     getElements() {
         return elements;
     },
+    
+    /**
+     * Renderiza todo o conteúdo estático da aplicação que não muda com frequência.
+     * @param {object|null} profile - O perfil do utilizador para verificações de nível.
+     */
+    renderAllStaticContent(profile) {
+        this.renderAvatarChoices(profile);
+        this.renderSkillLibrary(profile);
+        this.renderConditioningLibrary(profile);
+        this.renderMasters();
+        this.renderTheory();
+        this.renderBeltProgression(profile);
+        this.renderGlossary(profile);
+        this.renderAchievements(profile);
+    },
 
     /**
      * Atualiza toda a interface do utilizador com base no perfil atual.
@@ -144,9 +159,9 @@ export const uiManager = {
         elements.userStatusBelt.textContent = currentBelt.name;
 
         const avatar = AVATAR_LIST.find(a => a.id === userProfile.avatar);
-        const avatarId = avatar ? avatar.id.substring(6, 7) : "?";
-        elements.userStatusAvatar.src = `https://placehold.co/60x60/2c2c2c/ecf0f1?text=${avatarId}`;
-        elements.passaporteAvatarDisplay.src = `https://placehold.co/150x150/2c2c2c/ecf0f1?text=${avatarId}`;
+        const avatarSrc = avatar ? `./assets/avatars/${avatar.id}` : 'https://placehold.co/150x150/2c2c2c/ecf0f1?text=?';
+        elements.userStatusAvatar.src = avatarSrc;
+        elements.passaporteAvatarDisplay.src = avatarSrc;
 
         if (nextBelt) {
             const xpForNextLevel = nextBelt.minXp;
@@ -162,14 +177,17 @@ export const uiManager = {
         elements.passaporteBeltSpan.textContent = currentBelt.name;
         elements.passaportePontosSpan.textContent = userProfile.xp;
         elements.studentIdDisplay.textContent = userProfile.studentId;
-        elements.passaporteAlturaSpan.textContent = userProfile.altura || 'N/A';
-        elements.passaportePesoSpan.textContent = userProfile.peso || 'N/A';
+        elements.passaporteAlturaSpan.textContent = userProfile.height || 'N/A';
+        elements.passaportePesoSpan.textContent = userProfile.weight || 'N/A';
         elements.passaporteImcSpan.textContent = userProfile.imc || 'N/A';
         elements.passaporteStreakSpan.textContent = userProfile.streak;
         elements.passaporteAchievementsSpan.textContent = `${userProfile.achievements.length} / ${Object.keys(ACHIEVEMENTS).length}`;
 
         this.renderNavigation(userProfile);
         this.updateStaminaBar(userProfile.stamina, userProfile.maxStamina);
+        
+        // Re-renderiza conteúdo que depende do nível do utilizador
+        this.renderAllStaticContent(userProfile);
     },
 
     /**
@@ -190,10 +208,11 @@ export const uiManager = {
     toggleProfileForm(show, profile = null) {
         elements.perfilFormView.style.display = show ? 'block' : 'none';
         elements.perfilDashboardView.style.display = show ? 'none' : 'block';
-        if (show && profile) {
-            elements.perfilNomeInput.value = profile.name;
-            elements.perfilAlturaInput.value = profile.altura;
-            elements.perfilPesoInput.value = profile.peso;
+        if (show) {
+            elements.perfilNomeInput.value = profile ? profile.name : '';
+            elements.perfilAlturaInput.value = profile ? profile.height : '';
+            elements.perfilPesoInput.value = profile ? profile.weight : '';
+            this.renderAvatarChoices(profile);
         }
     },
 
@@ -220,14 +239,236 @@ export const uiManager = {
             }
             
             button.innerHTML = buttonHTML;
-            // O event listener será adicionado no app.js
             navContainer.appendChild(button);
         });
     },
     
-    // ... (outras funções de renderização como renderLibraryList, createTimerCard, etc., seriam movidas para aqui)
-    // Por uma questão de brevidade, vamos focar-nos na estrutura principal.
-    // O código completo para cada função de renderização seria movido para este módulo.
+    /**
+     * Renderiza as opções de avatares no formulário de perfil.
+     * @param {object|null} profile - O perfil do utilizador para verificar os avatares desbloqueados.
+     */
+    renderAvatarChoices(profile) {
+        const grid = elements.avatarChoicesGrid;
+        if (!grid) return;
+        grid.innerHTML = '';
+        const userLevel = profile ? profile.unlockedBeltLevel : 0;
+
+        AVATAR_LIST.forEach(avatar => {
+            const img = document.createElement('img');
+            img.src = `./assets/avatars/${avatar.id}`;
+            img.alt = `Avatar ${avatar.id}`;
+            img.className = 'avatar-choice';
+            img.dataset.avatarId = avatar.id;
+
+            if (avatar.requiredBelt > userLevel) {
+                img.classList.add('locked');
+                img.title = `Desbloqueado no ${BELT_SYSTEM.find(b => b.level === avatar.requiredBelt)?.name || ''}`;
+            } else {
+                img.title = 'Selecionar este avatar';
+            }
+            grid.appendChild(img);
+        });
+    },
+
+    /**
+     * Cria o HTML para um cartão de exercício.
+     * @param {object} item - O objeto do exercício.
+     * @param {boolean} isLocked - Se o exercício está bloqueado.
+     * @returns {string} O HTML do cartão.
+     */
+    createTimerCard(item, isLocked) {
+        const lockIcon = isLocked ? '<span class="lock-icon">🔒</span>' : '';
+        const videoButton = item.videoUrl ? `<button class="action-button video-btn" data-video-url="${item.videoUrl}" data-title="${item.title}" ${isLocked ? 'disabled' : ''}>Ver Vídeo</button>` : '';
+        
+        return `
+            <div class="timer-card floating-card zoom-on-hover ${isLocked ? 'locked' : ''}" id="timer-${item.id}">
+                <h3>${item.title} ${lockIcon}</h3>
+                <p>${item.description}</p>
+                <div class="timer-visual-container">
+                    <svg class="timer-progress-ring" width="160" height="160">
+                        <circle class="timer-progress-ring__background" r="70" cx="80" cy="80"></circle>
+                        <circle class="timer-progress-ring__circle" r="70" cx="80" cy="80"></circle>
+                    </svg>
+                    <div class="timer-display">${item.duration}s</div>
+                </div>
+                <div class="timer-controls">
+                    <button class="action-button start-btn" data-item-id="${item.id}" ${isLocked ? 'disabled' : ''}>Iniciar</button>
+                    <button class="action-button stop-btn" data-item-id="${item.id}" style="display: none;">Parar</button>
+                    ${videoButton}
+                </div>
+                <div class="timer-xp-info">Ganha ${item.xp} XP | Custa ${item.staminaCost} ⚡</div>
+            </div>
+        `;
+    },
+    
+    /**
+     * Renderiza uma lista de exercícios numa categoria.
+     * @param {HTMLElement} container - O elemento onde a lista será renderizada.
+     * @param {object} categoryData - Os dados da categoria de exercícios.
+     * @param {object|null} profile - O perfil do utilizador.
+     */
+    renderLibraryList(container, categoryData, profile) {
+        const userLevel = profile ? profile.unlockedBeltLevel : 0;
+        container.innerHTML = '';
+
+        for (const categoryName in categoryData) {
+            const category = categoryData[categoryName];
+            let categoryHtml = `<h2 class="subtitulo-seccao">${categoryName}</h2><div class="card-grid">`;
+            
+            category.forEach(item => {
+                const isLocked = item.requiredBelt > userLevel;
+                categoryHtml += this.createTimerCard(item, isLocked);
+            });
+
+            categoryHtml += `</div>`;
+            container.innerHTML += categoryHtml;
+        }
+    },
+
+    renderSkillLibrary(profile) {
+        this.renderLibraryList(elements.skillContainer, WING_CHUN_TRAINING, profile);
+    },
+
+    renderConditioningLibrary(profile) {
+        elements.conditioningContainer.innerHTML = '';
+        const userLevel = profile ? profile.unlockedBeltLevel : 0;
+
+        for (const categoryName in CONDITIONING_TRAINING) {
+            const category = CONDITIONING_TRAINING[categoryName];
+            const accordionItem = document.createElement('div');
+            accordionItem.className = 'conditioning-accordion-item floating-card';
+            
+            let contentHtml = '<div class="card-grid">';
+            category.items.forEach(item => {
+                const isLocked = item.requiredBelt > userLevel;
+                contentHtml += this.createTimerCard(item, isLocked);
+            });
+            contentHtml += '</div>';
+
+            accordionItem.innerHTML = `
+                <div class="conditioning-accordion-header" style="border-left-color: ${category.color};">
+                    <h2 class="subtitulo-seccao">${categoryName}</h2>
+                    <span class="accordion-arrow">▶</span>
+                </div>
+                <div class="conditioning-accordion-content">
+                    ${contentHtml}
+                </div>
+            `;
+            elements.conditioningContainer.appendChild(accordionItem);
+        }
+    },
+    
+    renderMasters() {
+        elements.mastersContainer.innerHTML = GREAT_MASTERS_DATA.map(master => `
+            <div class="master-flip-card">
+                <div class="master-flip-card-inner">
+                    <div class="master-flip-card-front">
+                        <div class="master-image-placeholder">
+                            <img src="${master.image_placeholder}" alt="Imagem de ${master.name}">
+                        </div>
+                        <div class="master-front-info">
+                            <h3>${master.name}</h3>
+                            <p>${master.dynasty}</p>
+                        </div>
+                    </div>
+                    <div class="master-flip-card-back card-prose">
+                        ${master.content}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    },
+
+    renderTheory() {
+        elements.theoryContainer.innerHTML = THEORY_DATA.map(item => `
+            <div class="floating-card">
+                <div class="card-header"><h2 class="titulo-seccao">${item.title}</h2></div>
+                <div class="card-content card-prose">${item.content}</div>
+            </div>
+        `).join('');
+    },
+
+    renderBeltProgression(profile) {
+        const container = elements.beltProgressionContainer;
+        container.innerHTML = '';
+        const userLevel = profile ? profile.unlockedBeltLevel : 0;
+        const userXp = profile ? profile.xp : 0;
+
+        BELT_SYSTEM.forEach(belt => {
+            const isUnlocked = belt.level <= userLevel;
+            const canPromote = userLevel === belt.level - 1 && userXp >= belt.minXp;
+            
+            const item = document.createElement('div');
+            item.className = `belt-accordion-item ${isUnlocked ? 'unlocked' : 'locked'}`;
+            item.style.borderLeftColor = belt.color;
+
+            item.innerHTML = `
+                <div class="belt-accordion-header">
+                    <h3 style="color: ${belt.color};">${belt.name}</h3>
+                    <span class="belt-requirement">${isUnlocked ? 'Desbloqueado' : `Requer ${belt.minXp} XP`}</span>
+                </div>
+                <div class="belt-accordion-content">
+                    <p>Conteúdo relacionado com o ${belt.name} aparecerá aqui.</p>
+                    ${canPromote ? `
+                        <div class="promotion-area">
+                            <p>Parabéns! Atingiste o XP necessário para este cinturão.</p>
+                            <button class="action-button promote-btn" data-level="${belt.level}">Promover a ${belt.name}</button>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            container.appendChild(item);
+        });
+    },
+    
+    renderGlossary(profile) {
+        const userLevel = profile ? profile.unlockedBeltLevel : 0;
+
+        const renderCategory = (categoryData) => {
+            let html = '';
+            for (const categoryName in categoryData) {
+                const terms = categoryData[categoryName].filter(term => term.requiredBelt <= userLevel);
+                if (terms.length > 0) {
+                    html += `<h3 class="subtitulo-seccao">${categoryName}</h3>`;
+                    terms.forEach(term => {
+                        const beltColor = BELT_SYSTEM.find(b => b.level === term.requiredBelt)?.color || '#ecf0f1';
+                        html += `
+                            <div class="term-entry">
+                                <h4>
+                                    <span class="belt-dot" style="background-color: ${beltColor};"></span>
+                                    ${term.term}
+                                </h4>
+                                <p>${term.definition}</p>
+                            </div>`;
+                    });
+                }
+            }
+            return html;
+        };
+        
+        elements.glossaryContainerCinto.innerHTML = renderCategory(GLOSSARY_DATA);
+        elements.glossaryContainerGlobal.innerHTML = renderCategory(GLOSSARY_DATA); // Simplificado, poderia ter lógica diferente
+    },
+
+    renderAchievements(profile) {
+        const grid = elements.achievementsGrid;
+        grid.innerHTML = '';
+        const userAchievements = profile ? profile.achievements : [];
+
+        for (const id in ACHIEVEMENTS) {
+            const achievement = ACHIEVEMENTS[id];
+            const isUnlocked = userAchievements.includes(id);
+            
+            grid.innerHTML += `
+                <div class="achievement-badge ${isUnlocked ? 'unlocked' : 'locked'}">
+                    <div class="icon">${achievement.icon}</div>
+                    <h4>${achievement.name}</h4>
+                    <p>${achievement.description}</p>
+                    ${isUnlocked ? `<span class="unlocked-date">Desbloqueado em: ${new Date(achievement.date).toLocaleDateString()}</span>` : ''}
+                </div>
+            `;
+        }
+    },
 
     /**
      * Mostra uma notificação no ecrã.
@@ -240,12 +481,13 @@ export const uiManager = {
         elements.notificationText.textContent = text;
         
         notification.classList.remove('hidden');
+        notification.style.display = 'flex';
         notification.style.animation = 'none';
         void notification.offsetWidth; // Trigger reflow
         notification.style.animation = 'slideInDown 0.5s forwards, fadeOut 0.5s 3.5s forwards';
         
         setTimeout(() => {
-            notification.classList.add('hidden');
+            notification.style.display = 'none';
         }, 4000);
     },
 
@@ -273,11 +515,10 @@ export const uiManager = {
             dot.className = 'theme-dot';
             dot.style.background = `linear-gradient(145deg, ${theme.primary}, ${theme.secondary})`;
             dot.title = theme.name;
-            dot.dataset.themeKey = key; // Adiciona o data attribute
+            dot.dataset.themeKey = key;
             if (key === currentThemeKey) {
                 dot.classList.add('active');
             }
-            // O event listener será adicionado no app.js
             container.appendChild(dot);
         }
     }

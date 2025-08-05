@@ -7,7 +7,6 @@
  * - Gere o estado geral da aplicação, como a secção ativa.
  */
 
-// CORREÇÃO: A variável NAV_ITEMS foi adicionada à lista de importações.
 import { BELT_SYSTEM, NAV_ITEMS } from './data.js';
 import { profileManager } from './profileManager.js';
 import { uiManager } from './uiManager.js';
@@ -30,6 +29,9 @@ const WingChunApp = {
         
         this.addEventListeners();
         
+        // CORREÇÃO: Renderiza todo o conteúdo estático no arranque.
+        uiManager.renderAllStaticContent(profile);
+        
         if (profile) {
             uiManager.updateUI(profile, this.getBeltByLevel);
         } else {
@@ -40,13 +42,11 @@ const WingChunApp = {
     },
     
     addEventListeners() {
-        // Adiciona um ouvinte de evento ao botão para guardar o perfil.
         const guardarPerfilBtn = document.getElementById('guardarPerfilBtn');
         if (guardarPerfilBtn) {
             guardarPerfilBtn.addEventListener('click', () => this.handleSaveProfile());
         }
         
-        // Adiciona ouvintes de eventos para os outros botões de perfil.
         const editarPerfilBtn = document.getElementById('editarPerfilBtn');
         if (editarPerfilBtn) {
             editarPerfilBtn.addEventListener('click', () => this.handleEditProfile());
@@ -63,7 +63,6 @@ const WingChunApp = {
             importProfileBtn.addEventListener('click', () => importFileInput.click());
             importFileInput.addEventListener('change', (e) => this.handleImportFile(e));
         }
-
 
         this.elements.navHub.addEventListener('click', (e) => {
             const navButton = e.target.closest('.nav-button');
@@ -91,6 +90,27 @@ const WingChunApp = {
                 }
             });
         }
+        
+        // Adiciona um event listener para a seleção de avatares
+        if (this.elements.avatarChoicesGrid) {
+            this.elements.avatarChoicesGrid.addEventListener('click', (e) => {
+                const target = e.target.closest('.avatar-choice:not(.locked)');
+                if (!target) return;
+                
+                // Remove a seleção anterior
+                const selected = this.elements.avatarChoicesGrid.querySelector('.selected');
+                if(selected) selected.classList.remove('selected');
+
+                // Adiciona a nova seleção
+                target.classList.add('selected');
+                this.state.selectedAvatar = target.dataset.avatarId;
+                
+                // Atualiza a pré-visualização
+                if(this.elements.formAvatarPreview) {
+                    this.elements.formAvatarPreview.src = target.src;
+                }
+            });
+        }
     },
 
     handleSaveProfile() {
@@ -100,6 +120,11 @@ const WingChunApp = {
 
         if (!nome || !altura || !peso || altura < 100 || altura > 250 || peso < 30 || peso > 250) {
             uiManager.showNotification("Por favor, preencha todos os campos com valores realistas.", "⚠️");
+            return;
+        }
+        
+        if (!this.state.selectedAvatar) {
+            uiManager.showNotification("Por favor, selecione um avatar.", "⚠️");
             return;
         }
 
@@ -119,7 +144,6 @@ const WingChunApp = {
         this.state.selectedAvatar = profile.avatar;
         uiManager.toggleProfileForm(true, profile);
     },
-
 
     handleExportProfile() {
         const profile = profileManager.getProfile();
@@ -184,5 +208,3 @@ const WingChunApp = {
 document.addEventListener('DOMContentLoaded', () => {
     WingChunApp.init();
 });
-
-// CORREÇÃO: A chaveta '}' extra que estava aqui foi removida.
