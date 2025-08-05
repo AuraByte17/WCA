@@ -38,38 +38,38 @@ export const BELT_SYSTEM = [
 
 export const WING_CHUN_TRAINING = {
     "Técnicas Fundamentais": [
-        { id: "wc_yat_chi_kuen", title: "Soco em Cadeia (Yat Chi Kuen)", description: "Praticar o soco vertical, focando na estrutura e relaxamento.", xp: 40, duration: 60, requiredBelt: 0, staminaCost: 8, difficulty: 'Essencial', videoUrl: "https://www.youtube.com/embed/xYe-8iho2tE" },
-        { id: "wc_tan_sao", title: "Tan Sao (攤手)", description: "A 'Mão que Espalha'. Uma defesa com a palma para cima para controlar o cotovelo.", xp: 50, duration: 60, requiredBelt: 1, staminaCost: 10, difficulty: 'Fundamental', videoUrl: "https://www.youtube.com/embed/YpnbA5gJgX4" },
-        { id: "wc_pak_sao", title: "Pack Sao (拍手)", description: "A 'Mão Palmada'. Uma defesa de desvio rápido para limpar o caminho.", xp: 50, duration: 60, requiredBelt: 1, staminaCost: 10, difficulty: 'Fundamental', videoUrl: "https://www.youtube.com/embed/s2ECoPcsbvo" },
-        { id: "wc_bong_sao", title: "Bong Sao (膀手)", description: "O 'Braço-Asa'. Uma defesa angular para redirecionar a força do oponente.", xp: 70, duration: 75, requiredBelt: 2, staminaCost: 15, difficulty: 'Intermédio', videoUrl: "https://www.youtube.com/embed/13sSj8qBF9M" },
-        { id: "wc_lap_sao", title: "Lap Sao (拉手)", description: "A 'Mão que Puxa'. Uma técnica para quebrar a estrutura do oponente, puxando-o.", xp: 70, duration: 60, requiredBelt: 2, staminaCost: 15, difficulty: 'Fundamental', videoUrl: "https://www.youtube.com/embed/G6nAV-nB6-A" },
+        { id: "wc_yat_chi_kuen", title: "Soco em Cadeia (Yat Chi Kuen)", description: "Praticar o soco vertical, focando na estrutura e relaxamento.", xp: 40, duration: 60, requiredBelt: 0, staminaCost: 5, difficulty: 'Essencial', videoUrl: "https://www.youtube.com/embed/xYe-8iho2tE" },
+        { id: "wc_tan_sao", title: "Tan Sao (攤手)", description: "A 'Mão que Espalha'. Uma defesa com a palma para cima para controlar o cotovelo.", xp: 50, duration: 60, requiredBelt: 1, staminaCost: 8, difficulty: 'Fundamental', videoUrl: "https://www.youtube.com/embed/YpnbA5gJgX4" },
+        { id: "wc_pak_sao", title: "Pack Sao (拍手)", description: "A 'Mão Palmada'. Uma defesa de desvio rápido para limpar o caminho.", xp: 50, duration: 60, requiredBelt: 1, staminaCost: 8, difficulty: 'Fundamental', videoUrl: "https://www.youtube.com/embed/s2ECoPcsbvo" },
+        { id: "wc_bong_sao", title: "Bong Sao (膀手)", description: "O 'Braço-Asa'. Uma defesa angular para redirecionar a força do oponente.", xp: 70, duration: 75, requiredBelt: 2, staminaCost: 12, difficulty: 'Intermédio', videoUrl: "https://www.youtube.com/embed/13sSj8qBF9M" },
+        { id: "wc_lap_sao", title: "Lap Sao (拉手)", description: "A 'Mão que Puxa'. Uma técnica para quebrar a estrutura do oponente, puxando-o.", xp: 70, duration: 60, requiredBelt: 2, staminaCost: 12, difficulty: 'Fundamental', videoUrl: "https://www.youtube.com/embed/G6nAV-nB6-A" },
     ],
     "Siu Nim Tao - Primeira Forma": [
-        { id: "wc_snt_full", title: "Siu Nim Tao (Forma Completa)", description: "A 'Pequena Ideia'. Pratique a forma completa para internalizar os movimentos.", xp: 150, duration: 180, requiredBelt: 1, staminaCost: 25, difficulty: 'Fundamental', videoUrl: "https://www.youtube.com/embed/p9sL4tM4-mY" },
-        { id: "wc_wu_sao_fook_sao", title: "Wu Sao / Fook Sao", description: "Prática da Mão que Protege e da Mão que Controla, essenciais para a defesa.", xp: 40, duration: 90, requiredBelt: 1, staminaCost: 8 },
-        { id: "wc_gum_sao", title: "Gum Sao (Mão que Pressiona)", description: "Prática da Mão que Pressiona, usada para controlar a linha inferior.", xp: 40, duration: 60, requiredBelt: 1, staminaCost: 8 },
-        { id: "wc_lan_sao_fack_sao", title: "Lan Sao / Fack Sao", description: "Prática da Mão Barreira e da Mão Chicote, combinando bloqueio e ataque.", xp: 50, duration: 75, requiredBelt: 1, staminaCost: 10 },
-        { id: "wc_jam_sao", title: "Jam Sao (Mão que Corta)", description: "Prática da Mão que Corta, uma defesa curta e descendente.", xp: 40, duration: 60, requiredBelt: 1, staminaCost: 8 },
-        { id: "wc_gaun_sao", title: "Gaun Sao (Mão que Cultiva)", description: "Prática da Mão que Cultiva, um bloqueio circular para redirecionar energia.", xp: 50, duration: 75, requiredBelt: 1, staminaCost: 10 },
+        { id: "wc_snt_full", title: "Siu Nim Tao (Forma Completa)", description: "A 'Pequena Ideia'. Pratique a forma completa para internalizar os movimentos.", xp: 150, duration: 180, requiredBelt: 1, staminaCost: 20, difficulty: 'Fundamental', videoUrl: "https://www.youtube.com/embed/p9sL4tM4-mY" },
+        { id: "wc_wu_sao_fook_sao", title: "Wu Sao / Fook Sao", description: "Prática da Mão que Protege e da Mão que Controla, essenciais para a defesa.", xp: 40, duration: 90, requiredBelt: 1, staminaCost: 6 },
+        { id: "wc_gum_sao", title: "Gum Sao (Mão que Pressiona)", description: "Prática da Mão que Pressiona, usada para controlar a linha inferior.", xp: 40, duration: 60, requiredBelt: 1, staminaCost: 6 },
+        { id: "wc_lan_sao_fack_sao", title: "Lan Sao / Fack Sao", description: "Prática da Mão Barreira e da Mão Chicote, combinando bloqueio e ataque.", xp: 50, duration: 75, requiredBelt: 1, staminaCost: 8 },
+        { id: "wc_jam_sao", title: "Jam Sao (Mão que Corta)", description: "Prática da Mão que Corta, uma defesa curta e descendente.", xp: 40, duration: 60, requiredBelt: 1, staminaCost: 6 },
+        { id: "wc_gaun_sao", title: "Gaun Sao (Mão que Cultiva)", description: "Prática da Mão que Cultiva, um bloqueio circular para redirecionar energia.", xp: 50, duration: 75, requiredBelt: 1, staminaCost: 8 },
     ],
     "Trabalho de Pés (Bo Faat)": [
-        { id: "wc_seung_ma", title: "Seung Ma (Passo a Avançar)", description: "O passo de avanço fundamental, mantendo o peso na perna de trás para mobilidade.", xp: 60, duration: 90, requiredBelt: 2, staminaCost: 12, difficulty: 'Intermédio', videoUrl: "https://www.youtube.com/embed/JFv4fQ57Guo" },
-        { id: "wc_hau_ma", title: "Hau Ma (Passo a Recuar)", description: "O passo de recuo para controlar a distância e absorver a pressão do oponente.", xp: 60, duration: 90, requiredBelt: 2, staminaCost: 12, difficulty: 'Intermédio', videoUrl: "https://www.youtube.com/embed/zWBMFx-EZMk" },
+        { id: "wc_seung_ma", title: "Seung Ma (Passo a Avançar)", description: "O passo de avanço fundamental, mantendo o peso na perna de trás para mobilidade.", xp: 60, duration: 90, requiredBelt: 2, staminaCost: 10, difficulty: 'Intermédio', videoUrl: "https://www.youtube.com/embed/JFv4fQ57Guo" },
+        { id: "wc_hau_ma", title: "Hau Ma (Passo a Recuar)", description: "O passo de recuo para controlar a distância e absorver a pressão do oponente.", xp: 60, duration: 90, requiredBelt: 2, staminaCost: 10, difficulty: 'Intermédio', videoUrl: "https://www.youtube.com/embed/zWBMFx-EZMk" },
     ],
     "Exercícios de Sensibilidade": [
-        { id: "wc_man_sao", title: "Man Sao (Mão Inquisitiva)", description: "A 'Mão que Pergunta'. Usada para testar e controlar a distância e as reações do oponente.", xp: 80, duration: 120, requiredBelt: 2, staminaCost: 18 },
-        { id: "wc_dan_chi", title: "Dan Chi Sao (單黐手)", description: "O 'Braço Colado Único'. Desenvolve a sensibilidade.", xp: 100, duration: 120, requiredBelt: 1, staminaCost: 20, difficulty: 'Iniciante', videoUrl: "https://www.youtube.com/embed/0Ie5sHNUjX4" },
-        { id: "wc_look_sao", title: "Look Sao (碌手)", description: "Os 'Braços que Enrolam'. Treina a fluidez.", xp: 100, duration: 120, requiredBelt: 1, staminaCost: 20, difficulty: 'Intermédio', videoUrl: "https://www.youtube.com/embed/42N52I1e_O8" },
-        { id: "wc_chi_sao", title: "Chi Sao (黐手)", description: "Os 'Braços Colados'. O coração do Wing Chun.", xp: 180, duration: 180, requiredBelt: 2, staminaCost: 35, difficulty: 'Intermédio', videoUrl: "https://www.youtube.com/embed/LAAaE6o_pI4" },
+        { id: "wc_man_sao", title: "Man Sao (Mão Inquisitiva)", description: "A 'Mão que Pergunta'. Usada para testar e controlar a distância e as reações do oponente.", xp: 80, duration: 120, requiredBelt: 2, staminaCost: 15 },
+        { id: "wc_dan_chi", title: "Dan Chi Sao (單黐手)", description: "O 'Braço Colado Único'. Desenvolve a sensibilidade.", xp: 100, duration: 120, requiredBelt: 1, staminaCost: 18, difficulty: 'Iniciante', videoUrl: "https://www.youtube.com/embed/0Ie5sHNUjX4" },
+        { id: "wc_look_sao", title: "Look Sao (碌手)", description: "Os 'Braços que Enrolam'. Treina a fluidez.", xp: 100, duration: 120, requiredBelt: 1, staminaCost: 18, difficulty: 'Intermédio', videoUrl: "https://www.youtube.com/embed/42N52I1e_O8" },
+        { id: "wc_chi_sao", title: "Chi Sao (黐手)", description: "Os 'Braços Colados'. O coração do Wing Chun.", xp: 180, duration: 180, requiredBelt: 2, staminaCost: 30, difficulty: 'Intermédio', videoUrl: "https://www.youtube.com/embed/LAAaE6o_pI4" },
     ],
     "Formas (Avançadas)": [
-        { id: "wc_ck", title: "Cham Kiu (尋橋)", description: "A 'Ponte que Procura'. Introduz o trabalho de pés e rotação.", xp: 400, duration: 300, requiredBelt: 2, staminaCost: 50, difficulty: 'Intermédio', videoUrl: "https://www.youtube.com/embed/SOes8aD2kGg" },
-        { id: "wc_bj", title: "Biu Jee (鏢指)", description: "Os 'Dedos que Furam'. Técnicas de emergência.", xp: 700, duration: 300, requiredBelt: 3, staminaCost: 60, difficulty: 'Avançado', videoUrl: "https://www.youtube.com/embed/mR5p0nQG34A" },
+        { id: "wc_ck", title: "Cham Kiu (尋橋)", description: "A 'Ponte que Procura'. Introduz o trabalho de pés e rotação.", xp: 400, duration: 300, requiredBelt: 2, staminaCost: 40, difficulty: 'Intermédio', videoUrl: "https://www.youtube.com/embed/SOes8aD2kGg" },
+        { id: "wc_bj", title: "Biu Jee (鏢指)", description: "Os 'Dedos que Furam'. Técnicas de emergência.", xp: 700, duration: 300, requiredBelt: 3, staminaCost: 50, difficulty: 'Avançado', videoUrl: "https://www.youtube.com/embed/mR5p0nQG34A" },
     ],
     "Armas": [
-        { id: "wc_myj", title: "Muk Yan Jong (木人樁)", description: "O 'Homem de Madeira'. Refina ângulos e posições.", xp: 500, duration: 300, requiredBelt: 4, staminaCost: 70, difficulty: 'Avançado', videoUrl: "https://www.youtube.com/embed/vYe1M0h33vA" },
-        { id: "wc_ldbk", title: "Luk Dim Boon Kwan (六點半棍)", description: "O 'Bastão de Seis Pontos e Meio'. Desenvolve força e precisão.", xp: 800, duration: 300, requiredBelt: 5, staminaCost: 80, difficulty: 'Mestria', videoUrl: "https://www.youtube.com/embed/VqV-JdGzBg4" },
-        { id: "wc_bjd", title: "Baat Jaam Do (八斬刀)", description: "As 'Facas de Oito Cortes'. A extensão máxima das mãos.", xp: 900, duration: 300, requiredBelt: 6, staminaCost: 90, difficulty: 'Mestria', videoUrl: "https://www.youtube.com/embed/QdYQY-F4o_Y" },
+        { id: "wc_myj", title: "Muk Yan Jong (木人樁)", description: "O 'Homem de Madeira'. Refina ângulos e posições.", xp: 500, duration: 300, requiredBelt: 4, staminaCost: 60, difficulty: 'Avançado', videoUrl: "https://www.youtube.com/embed/vYe1M0h33vA" },
+        { id: "wc_ldbk", title: "Luk Dim Boon Kwan (六點半棍)", description: "O 'Bastão de Seis Pontos e Meio'. Desenvolve força e precisão.", xp: 800, duration: 300, requiredBelt: 5, staminaCost: 70, difficulty: 'Mestria', videoUrl: "https://www.youtube.com/embed/VqV-JdGzBg4" },
+        { id: "wc_bjd", title: "Baat Jaam Do (八斬刀)", description: "As 'Facas de Oito Cortes'. A extensão máxima das mãos.", xp: 900, duration: 300, requiredBelt: 6, staminaCost: 80, difficulty: 'Mestria', videoUrl: "https://www.youtube.com/embed/QdYQY-F4o_Y" },
     ]
 };
 
@@ -92,14 +92,14 @@ export const CONDITIONING_TRAINING = {
      "Membros Superiores": {
         color: "#e74c3c",
         items: [
-            { id: "c3", title: "Flexões Wing Chun", description: "Flexões com os cotovelos junto ao corpo para fortalecer o tricípite.", requiredBelt: 1, difficulty: 'Iniciante', videoUrl: "https://www.youtube.com/embed/b5f3d_K1aG8", type: 'incremental', duration: 60, xp: 50, staminaCost: 10 },
-            { id: "c5", title: "Treino com Saco de Parede", description: "Condicionar os punhos e desenvolver força de impacto.", requiredBelt: 2, difficulty: 'Intermédio', type: 'incremental', duration: 60, xp: 60, staminaCost: 12, videoUrl: "https://www.youtube.com/embed/example" },
+            { id: "c3", title: "Flexões Wing Chun", description: "Flexões com os cotovelos junto ao corpo para fortalecer o tricípite.", requiredBelt: 1, difficulty: 'Iniciante', videoUrl: "https://www.youtube.com/embed/b5f3d_K1aG8", type: 'incremental', duration: 60, xp: 50, staminaCost: 8 },
+            { id: "c5", title: "Treino com Saco de Parede", description: "Condicionar os punhos e desenvolver força de impacto.", requiredBelt: 2, difficulty: 'Intermédio', type: 'incremental', duration: 60, xp: 60, staminaCost: 10, videoUrl: "https://www.youtube.com/embed/example" },
         ]
     },
     "Core e Postura": {
         color: "#3498db",
         items: [
-            { id: "c1", title: "Postura (Yee Jee Kim Yeung Ma)", description: "Manter a postura base. Foco na estrutura, relaxamento e enraizamento.", requiredBelt: 0, difficulty: 'Essencial', type: 'incremental', duration: 120, xp: 80, staminaCost: 15, videoUrl: "https://www.youtube.com/embed/example" },
+            { id: "c1", title: "Postura (Yee Jee Kim Yeung Ma)", description: "Manter a postura base. Foco na estrutura, relaxamento e enraizamento.", requiredBelt: 0, difficulty: 'Essencial', type: 'incremental', duration: 120, xp: 80, staminaCost: 12, videoUrl: "https://www.youtube.com/embed/example" },
         ]
     },
     "Membros Inferiores": {
@@ -116,12 +116,12 @@ export const RECOMMENDED_PLANS = {
             {
                 id: 'rec_cond_beg_1',
                 name: "Condicionamento Essencial",
-                totalDuration: 1200, // 20 minutos
+                totalDuration: 1200,
                 xpAwarded: 800,
-                staminaCost: 50,
+                staminaCost: 40,
                 phases: {
                     warmup: [ { id: 'warmup_arm_circles_fwd', duration: 30 }, { id: 'warmup_torso_twists', duration: 45 }, { id: 'warmup_leg_swings_fwd', duration: 45 }, { id: 'warmup_bodyweight_squats', duration: 60 } ],
-                    main: [ { id: 'c1', duration: 360 }, { id: 'c4', duration: 360 }, { id: 'c3', duration: 180 } ],
+                    main: [ { id: 'c1', duration: 360 }, { id: 'bw_agachamento', duration: 360 }, { id: 'bw_flexoes_inclinadas', duration: 180 } ],
                     cooldown: [ { id: 'c1', duration: 120 } ]
                 }
             }
@@ -130,12 +130,12 @@ export const RECOMMENDED_PLANS = {
              {
                 id: 'rec_cond_int_1',
                 name: "Resistência Intermédia",
-                totalDuration: 1200, // 20 minutos
+                totalDuration: 1200,
                 xpAwarded: 1200,
-                staminaCost: 65,
+                staminaCost: 55,
                 phases: {
-                    warmup: [ { id: 'warmup_arm_circles_fwd', duration: 30 }, { id: 'warmup_torso_twists', duration: 45 }, { id: 'warmup_leg_swings_fwd', duration: 45 }, { id: 'warmup_bodyweight_squats', duration: 60 } ],
-                    main: [ { id: 'c5', duration: 420 }, { id: 'c3', duration: 300 }, { id: 'c4', duration: 180 } ],
+                    warmup: [ { id: 'warmup_high_knees', duration: 45 }, { id: 'warmup_bodyweight_squats', duration: 60 } ],
+                    main: [ { id: 'c5', duration: 420 }, { id: 'bw_flexao_padrao', duration: 300 }, { id: 'bw_lunge', duration: 180 } ],
                     cooldown: [ { id: 'c1', duration: 120 } ]
                 }
             }
@@ -144,12 +144,12 @@ export const RECOMMENDED_PLANS = {
             {
                 id: 'rec_cond_adv_1',
                 name: "Força Explosiva",
-                totalDuration: 1200, // 20 minutos
+                totalDuration: 1200,
                 xpAwarded: 1600,
-                staminaCost: 80,
+                staminaCost: 70,
                 phases: {
-                    warmup: [ { id: 'warmup_high_knees', duration: 45 }, { id: 'warmup_bodyweight_squats', duration: 60 }, { id: 'warmup_arm_crosses', duration: 30 } ],
-                    main: [ { id: 'c5', duration: 420 }, { id: 'c3', duration: 360 }, { id: 'c4', duration: 210 } ],
+                    warmup: [ { id: 'warmup_high_knees', duration: 45 }, { id: 'warmup_bodyweight_squats', duration: 60 } ],
+                    main: [ { id: 'c5', duration: 420 }, { id: 'bw_flexao_arqueira', duration: 360 }, { id: 'bw_agachamento_salto', duration: 210 } ],
                     cooldown: [ { id: 'c1', duration: 75 } ]
                 }
             }
@@ -160,9 +160,9 @@ export const RECOMMENDED_PLANS = {
             {
                 id: 'rec_skill_beg_1',
                 name: "Fundamentos de Skill",
-                totalDuration: 1200, // 20 minutos
+                totalDuration: 1200,
                 xpAwarded: 1000,
-                staminaCost: 60,
+                staminaCost: 50,
                 phases: {
                     warmup: [ { id: 'warmup_arm_circles_fwd', duration: 30 }, { id: 'warmup_torso_twists', duration: 45 }, { id: 'warmup_leg_swings_fwd', duration: 45 }, { id: 'warmup_bodyweight_squats', duration: 60 } ],
                     main: [ { id: 'wc_yat_chi_kuen', duration: 240 }, { id: 'wc_tan_sao', duration: 240 }, { id: 'wc_pak_sao', duration: 240 }, { id: 'wc_dan_chi', duration: 210 } ],
@@ -174,9 +174,9 @@ export const RECOMMENDED_PLANS = {
             {
                 id: 'rec_skill_int_1',
                 name: "Fluidez e Controlo",
-                totalDuration: 1200, // 20 minutos
+                totalDuration: 1200,
                 xpAwarded: 1400,
-                staminaCost: 70,
+                staminaCost: 65,
                 phases: {
                     warmup: [ { id: 'warmup_arm_circles_fwd', duration: 30 }, { id: 'warmup_torso_twists', duration: 45 }, { id: 'warmup_leg_swings_fwd', duration: 45 }, { id: 'warmup_bodyweight_squats', duration: 60 } ],
                     main: [ { id: 'wc_bong_sao', duration: 240 }, { id: 'wc_lap_sao', duration: 240 }, { id: 'wc_look_sao', duration: 300 }, { id: 'wc_seung_ma', duration: 150 } ],
@@ -188,11 +188,11 @@ export const RECOMMENDED_PLANS = {
             {
                 id: 'rec_skill_adv_1',
                 name: "Combinação Avançada",
-                totalDuration: 1200, // 20 minutos
+                totalDuration: 1200,
                 xpAwarded: 1800,
-                staminaCost: 85,
+                staminaCost: 75,
                 phases: {
-                    warmup: [ { id: 'warmup_high_knees', duration: 45 }, { id: 'warmup_bodyweight_squats', duration: 60 }, { id: 'warmup_arm_crosses', duration: 30 } ],
+                    warmup: [ { id: 'warmup_high_knees', duration: 45 }, { id: 'warmup_bodyweight_squats', duration: 60 } ],
                     main: [ { id: 'wc_chi_sao', duration: 420 }, { id: 'wc_man_sao', duration: 300 }, { id: 'wc_seung_ma', duration: 180 } ],
                     cooldown: [ { id: 'wc_ck', duration: 65 } ]
                 }
@@ -203,13 +203,13 @@ export const RECOMMENDED_PLANS = {
         beginner: [
              {
                 id: 'rec_mix_beg_1',
-                name: "Mix Iniciante",
-                totalDuration: 1200, // 20 minutos
+                name: "Força do Lutador",
+                totalDuration: 1200,
                 xpAwarded: 900,
-                staminaCost: 55,
+                staminaCost: 45,
                 phases: {
-                    warmup: [ { id: 'warmup_arm_circles_fwd', duration: 30 }, { id: 'warmup_torso_twists', duration: 45 }, { id: 'warmup_leg_swings_fwd', duration: 45 }, { id: 'warmup_bodyweight_squats', duration: 60 } ],
-                    main: [ { id: 'wc_yat_chi_kuen', duration: 300 }, { id: 'wc_tan_sao', duration: 300 }, { id: 'c4', duration: 240 } ],
+                    warmup: [ { id: 'warmup_arm_circles_fwd', duration: 30 }, { id: 'warmup_bodyweight_squats', duration: 60 } ],
+                    main: [ { id: 'wc_yat_chi_kuen', duration: 300 }, { id: 'bw_flexao_padrao', duration: 300 }, { id: 'bw_agachamento', duration: 240 } ],
                     cooldown: [ { id: 'c1', duration: 120 } ]
                 }
             }
@@ -217,13 +217,13 @@ export const RECOMMENDED_PLANS = {
         intermediate: [
              {
                 id: 'rec_mix_int_1',
-                name: "Mix Intermédio",
-                totalDuration: 1200, // 20 minutos
+                name: "Poder e Fluidez",
+                totalDuration: 1200,
                 xpAwarded: 1300,
-                staminaCost: 70,
+                staminaCost: 60,
                 phases: {
-                    warmup: [ { id: 'warmup_arm_circles_fwd', duration: 30 }, { id: 'warmup_torso_twists', duration: 45 }, { id: 'warmup_leg_swings_fwd', duration: 45 }, { id: 'warmup_bodyweight_squats', duration: 60 } ],
-                    main: [ { id: 'wc_look_sao', duration: 420 }, { id: 'c3', duration: 300 }, { id: 'wc_seung_ma', duration: 210 } ],
+                    warmup: [ { id: 'warmup_high_knees', duration: 45 }, { id: 'warmup_arm_crosses', duration: 30 } ],
+                    main: [ { id: 'wc_look_sao', duration: 420 }, { id: 'bw_burpee_padrao', duration: 300 }, { id: 'wc_seung_ma', duration: 210 } ],
                     cooldown: [ { id: 'wc_snt_full', duration: 90 } ]
                 }
             }
@@ -231,13 +231,13 @@ export const RECOMMENDED_PLANS = {
         advanced: [
             {
                 id: 'rec_mix_adv_1',
-                name: "Mix Avançado",
-                totalDuration: 1200, // 20 minutos
+                name: "Controlo Total",
+                totalDuration: 1200,
                 xpAwarded: 1700,
-                staminaCost: 80,
+                staminaCost: 75,
                 phases: {
-                    warmup: [ { id: 'warmup_high_knees', duration: 45 }, { id: 'warmup_bodyweight_squats', duration: 60 }, { id: 'warmup_arm_crosses', duration: 30 } ],
-                    main: [ { id: 'wc_chi_sao', duration: 420 }, { id: 'c5', duration: 300 }, { id: 'wc_hau_ma', duration: 210 } ],
+                    warmup: [ { id: 'warmup_high_knees', duration: 45 }, { id: 'warmup_bodyweight_squats', duration: 60 } ],
+                    main: [ { id: 'wc_chi_sao', duration: 420 }, { id: 'bw_pistol_squat', duration: 300 }, { id: 'wc_hau_ma', duration: 210 } ],
                     cooldown: [ { id: 'wc_ck', duration: 65 } ]
                 }
             }
@@ -358,7 +358,58 @@ export const GLOSSARY_DATA = {
 
 export const MASTER_SECRET_KEY = "W1NGCHUN_S3CR3T_K3Y_F0R_H4SHING";
 
+// NOVA BIBLIOTECA DE EXERCÍCIOS DE PESO CORPORAL
+export const BODYWEIGHT_EXERCISES = {
+    "Membros Superiores (Geral)": {
+        color: "#9b59b6",
+        items: [
+            { id: "bw_flexoes_parede", title: "Flexões na Parede", description: "Fique de pé, de frente para uma parede...", xp: 10, duration: 60, requiredBelt: 0, staminaCost: 5, difficulty: 'Iniciante' },
+            { id: "bw_flexoes_inclinadas", title: "Flexões Inclinadas", description: "Encontre uma superfície elevada e estável...", xp: 10, duration: 60, requiredBelt: 0, staminaCost: 5, difficulty: 'Iniciante' },
+            { id: "bw_flexoes_joelhos", title: "Flexões de Joelhos", description: "Comece em posição de quatro...", xp: 10, duration: 60, requiredBelt: 0, staminaCost: 5, difficulty: 'Iniciante' },
+            { id: "bw_flexao_padrao", title: "Flexão Padrão (Push-up)", description: "Comece em posição de prancha alta...", xp: 20, duration: 60, requiredBelt: 0, staminaCost: 10, difficulty: 'Intermediário' },
+            { id: "bw_flexao_fechada", title: "Flexão com Pegada Fechada (Tríceps)", description: "Adote a posição de flexão padrão, mas com as mãos mais próximas...", xp: 20, duration: 60, requiredBelt: 0, staminaCost: 10, difficulty: 'Intermediário' },
+            { id: "bw_flexao_declinada", title: "Flexão Declinada", description: "Coloque os pés numa superfície elevada...", xp: 20, duration: 60, requiredBelt: 0, staminaCost: 10, difficulty: 'Intermediário' },
+            { id: "bw_flexao_spiderman", title: "Flexão Spiderman", description: "A partir da posição de flexão, ao baixar o corpo...", xp: 30, duration: 60, requiredBelt: 0, staminaCost: 15, difficulty: 'Avançado' },
+            { id: "bw_flexao_arqueira", title: "Flexão Arqueira (Archer Push-up)", description: "Comece numa posição de flexão com as mãos bem mais afastadas...", xp: 30, duration: 60, requiredBelt: 0, staminaCost: 15, difficulty: 'Avançado' },
+            { id: "bw_flexao_uma_mao", title: "Flexão com uma Mão", description: "Adote uma posição de flexão com os pés bem afastados...", xp: 40, duration: 60, requiredBelt: 0, staminaCost: 20, difficulty: 'Muito Avançado' },
+        ]
+    },
+    "Core (Geral)": {
+        color: "#3498db",
+        items: [
+            { id: "bw_dead_bug", title: "Dead Bug (Inseto Morto)", description: "Deite-se de costas com os braços estendidos...", xp: 10, duration: 60, requiredBelt: 0, staminaCost: 5, difficulty: 'Iniciante' },
+            { id: "bw_prancha_antebacos", title: "Prancha nos Antebraços", description: "Apoie-se nos antebraços e na ponta dos pés...", xp: 10, duration: 60, requiredBelt: 0, staminaCost: 5, difficulty: 'Iniciante' },
+            { id: "bw_elevacao_pelve", title: "Elevação de Pelve (Ponte de Glúteos)", description: "Deite-se de costas com os joelhos dobrados...", xp: 10, duration: 60, requiredBelt: 0, staminaCost: 5, difficulty: 'Iniciante' },
+            { id: "bw_prancha_lateral", title: "Prancha Lateral", description: "Deite-se de lado, apoiado num antebraço...", xp: 20, duration: 60, requiredBelt: 0, staminaCost: 10, difficulty: 'Intermediário' },
+            { id: "bw_elevacao_pernas", title: "Elevação de Pernas Deitado", description: "Deite-se de costas com as pernas estendidas...", xp: 20, duration: 60, requiredBelt: 0, staminaCost: 10, difficulty: 'Intermediário' },
+            { id: "bw_v_ups", title: "V-Ups", description: "Deite-se de costas com os braços estendidos...", xp: 30, duration: 60, requiredBelt: 0, staminaCost: 15, difficulty: 'Avançado' },
+            { id: "bw_hollow_body", title: "Hollow Body Hold", description: "Deite-se de costas. Pressione a região lombar...", xp: 30, duration: 60, requiredBelt: 0, staminaCost: 15, difficulty: 'Avançado' },
+        ]
+    },
+    "Membros Inferiores (Geral)": {
+        color: "#27ae60",
+        items: [
+            { id: "bw_agachamento", title: "Agachamento (Air Squat)", description: "Fique de pé com os pés na largura dos ombros...", xp: 10, duration: 60, requiredBelt: 0, staminaCost: 5, difficulty: 'Iniciante' },
+            { id: "bw_lunge", title: "Lunge (Afundo)", description: "Dê um passo à frente com uma perna...", xp: 10, duration: 60, requiredBelt: 0, staminaCost: 5, difficulty: 'Iniciante' },
+            { id: "bw_agachamento_salto", title: "Agachamento com Salto (Jump Squat)", description: "Faça um agachamento normal. Na subida...", xp: 20, duration: 60, requiredBelt: 0, staminaCost: 10, difficulty: 'Intermediário' },
+            { id: "bw_agachamento_bulgaro", title: "Agachamento Búlgaro (Bulgarian Split Squat)", description: "Coloque o peito de um pé num banco ou cadeira...", xp: 20, duration: 60, requiredBelt: 0, staminaCost: 10, difficulty: 'Intermediário' },
+            { id: "bw_pistol_squat", title: "Pistol Squat (Agachamento com uma Perna)", description: "Equilibre-se numa perna e estenda a outra...", xp: 30, duration: 60, requiredBelt: 0, staminaCost: 15, difficulty: 'Avançado' },
+            { id: "bw_lunge_salto", title: "Lunge com Salto", description: "Comece em posição de lunge. Salte explosivamente...", xp: 30, duration: 60, requiredBelt: 0, staminaCost: 15, difficulty: 'Avançado' },
+        ]
+    },
+    "Corpo Inteiro (Geral)": {
+        color: "#e74c3c",
+        items: [
+            { id: "bw_polichinelo", title: "Polichinelo (Jumping Jack)", description: "Comece de pé com os pés juntos...", xp: 10, duration: 60, requiredBelt: 0, staminaCost: 5, difficulty: 'Iniciante' },
+            { id: "bw_burpee_sem_flexao", title: "Burpee (sem flexão)", description: "Comece de pé. Agache-se e coloque as mãos no chão...", xp: 10, duration: 60, requiredBelt: 0, staminaCost: 5, difficulty: 'Iniciante' },
+            { id: "bw_mountain_climbers", title: "Mountain Climbers", description: "Comece em posição de prancha alta...", xp: 20, duration: 60, requiredBelt: 0, staminaCost: 10, difficulty: 'Intermediário' },
+            { id: "bw_burpee_padrao", title: "Burpee Padrão", description: "Comece de pé. Agache-se, coloque as mãos no chão...", xp: 20, duration: 60, requiredBelt: 0, staminaCost: 10, difficulty: 'Intermediário' },
+        ]
+    }
+};
+
 export const ALL_TRAINING_ITEMS = [
     ...Object.values(WING_CHUN_TRAINING).flat(),
-    ...Object.values(CONDITIONING_TRAINING).flatMap(cat => cat.items)
+    ...Object.values(CONDITIONING_TRAINING).flatMap(cat => cat.items),
+    ...Object.values(BODYWEIGHT_EXERCISES).flatMap(cat => cat.items)
 ];
