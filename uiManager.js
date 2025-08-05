@@ -6,7 +6,7 @@
  * - Gere a exibição de modais, notificações e a navegação entre as abas.
  * - É chamado pelos outros módulos para refletir as mudanças de estado no ecrã.
  */
-import { NAV_ITEMS, COLOR_THEMES, AVATAR_LIST, ALL_TRAINING_ITEMS } from './data.js';
+import { NAV_ITEMS, COLOR_THEMES, AVATAR_LIST, ALL_TRAINING_ITEMS, GREAT_MASTERS_DATA, THEORY_DATA, GLOSSARY_DATA, BELT_SYSTEM } from './data.js';
 
 // Objeto para guardar referências aos elementos do DOM para acesso rápido.
 const elements = {};
@@ -86,7 +86,7 @@ function queryElements() {
         planosTabBtns: document.querySelectorAll('#seccao-planos .profile-tab-btn'),
         planosTabPanes: document.querySelectorAll('#seccao-planos .profile-tab-pane'),
         glossaryTabBtns: document.querySelectorAll('#seccao-glossario .profile-tab-btn'),
-        glossarioTabPanes: document.querySelectorAll('#seccao-glossario .profile-tab-pane'),
+        glossaryTabPanes: document.querySelectorAll('#seccao-glossario .profile-tab-pane'),
         themePickerContainer: document.getElementById('theme-picker-container'),
         planExecutionModal: document.getElementById('plan-execution-modal'),
         planExecutionTitle: document.getElementById('plan-execution-title'),

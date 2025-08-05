@@ -7,19 +7,10 @@
  * - Gere o estado geral da aplicação, como a secção ativa.
  */
 
-import {
-    NAV_ITEMS,
-    COLOR_THEMES,
-    AVATAR_LIST,
-    ALL_TRAINING_ITEMS,
-    GREAT_MASTERS_DATA,
-    THEORY_DATA,
-    GLOSSARY_DATA,
-    BELT_SYSTEM
-} from './data.js';
+import { BELT_SYSTEM } from './data.js';
 import { profileManager } from './profileManager.js';
-// O uiManager e trainingManager serão criados nos próximos passos.
-// Por agora, vamos focar-nos na estrutura.
+import { uiManager } from './uiManager.js';
+import { trainingManager } from './trainingManager.js';
 
 const WingChunApp = {
     state: {
@@ -30,33 +21,21 @@ const WingChunApp = {
     elements: {},
 
     init() {
-        // Simula a inicialização dos outros módulos
-        this.elements = this.queryElements(); // Simula uiManager.init()
-        profileManager.loadProfile();
-
+        uiManager.init();
+        this.elements = uiManager.getElements();
+        trainingManager.init(uiManager, profileManager);
+        
+        const profile = profileManager.loadProfile();
+        
         this.addEventListeners();
-        this.renderInitialUI();
-    },
-
-    queryElements() {
-        // Esta função seria parte do uiManager, mas por agora fica aqui.
-        return {
-             navHub: document.getElementById('navigation-hub'),
-            appSidebar: document.getElementById('app-sidebar'),
-            seccoes: document.querySelectorAll('.seccao'),
-            mobileHeaderTitle: document.getElementById('current-section-title'),
-            openMenuBtn: document.getElementById('open-menu-btn'),
-            closeMenuBtn: document.getElementById('close-menu-btn'),
-            mobileMenuOverlay: document.getElementById('mobile-menu-overlay'),
-            mainContentArea: document.getElementById('main-content-area'),
-            guardarPerfilBtn: document.getElementById('guardarPerfilBtn'),
-            editarPerfilBtn: document.getElementById('editarPerfilBtn'),
-            exportProfileBtn: document.getElementById('exportProfileBtn'),
-            importProfileBtn: document.getElementById('importProfileBtn'),
-            importFileInput: document.getElementById('import-file-input'),
-            themePickerContainer: document.getElementById('theme-picker-container'),
-            // Adicionar outros elementos conforme necessário
-        };
+        
+        if (profile) {
+            uiManager.updateUI(profile, this.getBeltByLevel);
+        } else {
+            uiManager.toggleProfileForm(true);
+        }
+        uiManager.renderNavigation(profile);
+        this.mostrarSeccao(this.state.activeSection);
     },
     
     addEventListeners() {
@@ -66,38 +45,38 @@ const WingChunApp = {
         this.elements.importProfileBtn.addEventListener('click', () => this.elements.importFileInput.click());
         this.elements.importFileInput.addEventListener('change', (e) => this.handleImportFile(e));
 
-        // Event listeners para navegação
         this.elements.navHub.addEventListener('click', (e) => {
-            if (e.target.closest('.nav-button')) {
-                const seccaoId = e.target.closest('.nav-button').dataset.seccao;
-                this.mostrarSeccao(seccaoId);
+            const navButton = e.target.closest('.nav-button');
+            if (navButton) {
+                this.mostrarSeccao(navButton.dataset.seccao);
             }
         });
-        
-        // ... outros event listeners (mobile menu, modais, etc.)
-    },
 
-    renderInitialUI() {
-        const profile = profileManager.getProfile();
-        if (profile) {
-            // Simula uiManager.updateUI(profile, this.getBeltByLevel);
-            console.log("Perfil carregado, a renderizar UI do dashboard.");
-        } else {
-            // Simula uiManager.toggleProfileForm(true);
-            console.log("Nenhum perfil, a mostrar formulário de criação.");
-        }
-        // Simula uiManager.renderNavigation(profile);
+        this.elements.openMenuBtn.addEventListener('click', () => uiManager.toggleMobileMenu(true));
+        this.elements.closeMenuBtn.addEventListener('click', () => uiManager.toggleMobileMenu(false));
+        this.elements.mobileMenuOverlay.addEventListener('click', () => uiManager.toggleMobileMenu(false));
+
+        this.elements.themePickerContainer.addEventListener('click', (e) => {
+            if (e.target.classList.contains('theme-dot')) {
+                const themeKey = e.target.dataset.themeKey;
+                const profile = profileManager.getProfile();
+                if (profile) {
+                    profile.theme = themeKey;
+                    profileManager.saveProfile();
+                    uiManager.applyTheme(themeKey);
+                    uiManager.renderThemePicker(themeKey);
+                }
+            }
+        });
     },
 
     handleSaveProfile() {
-        // Lógica para obter dados do formulário
-        const nome = document.getElementById('perfil-nome').value;
-        const altura = parseFloat(document.getElementById('perfil-altura').value);
-        const peso = parseFloat(document.getElementById('perfil-peso').value);
+        const nome = this.elements.perfilNomeInput.value;
+        const altura = parseFloat(this.elements.perfilAlturaInput.value);
+        const peso = parseFloat(this.elements.perfilPesoInput.value);
 
-        if (!nome || !altura || !peso) {
-            // uiManager.showNotification("Preencha todos os campos.");
-            console.error("Preencha todos os campos.");
+        if (!nome || !altura || !peso || altura < 100 || altura > 250 || peso < 30 || peso > 250) {
+            uiManager.showNotification("Por favor, preencha todos os campos com valores realistas.", "⚠️");
             return;
         }
 
@@ -105,21 +84,25 @@ const WingChunApp = {
         if (!profile) {
             profile = profileManager.createNewProfile(nome, altura, peso, this.state.selectedAvatar);
         } else {
-            profileManager.updateProfile({ name: nome, height: altura, weight: peso, avatar: this.state.selectedAvatar });
+            profileManager.updateProfile({ name: nome, height: altura, weight: peso, avatar: this.state.selectedAvatar || profile.avatar });
         }
         
-        this.renderInitialUI();
+        uiManager.updateUI(profile, this.getBeltByLevel);
+        uiManager.toggleProfileForm(false);
     },
 
     handleEditProfile() {
         const profile = profileManager.getProfile();
-        // uiManager.toggleProfileForm(true, profile);
         this.state.selectedAvatar = profile.avatar;
+        uiManager.toggleProfileForm(true, profile);
     },
 
     handleExportProfile() {
         const profile = profileManager.getProfile();
-        if (!profile) return;
+        if (!profile) {
+            uiManager.showNotification("Nenhum perfil para exportar.", "⚠️");
+            return;
+        }
         const profileJson = JSON.stringify(profile, null, 2);
         const blob = new Blob([profileJson], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
@@ -128,6 +111,7 @@ const WingChunApp = {
         a.download = 'wingchun_profile.json';
         a.click();
         URL.revokeObjectURL(url);
+        uiManager.showNotification("Perfil exportado com sucesso!", "📥");
     },
 
     handleImportFile(event) {
@@ -138,10 +122,16 @@ const WingChunApp = {
         reader.onload = (e) => {
             try {
                 const newProfile = JSON.parse(e.target.result);
-                profileManager.setProfile(newProfile);
-                this.renderInitialUI();
+                if (newProfile && typeof newProfile.xp === 'number' && newProfile.name) {
+                    profileManager.setProfile(newProfile);
+                    uiManager.updateUI(newProfile, this.getBeltByLevel);
+                    uiManager.showNotification("Perfil importado com sucesso!", "📤");
+                } else {
+                    uiManager.showNotification("Ficheiro de perfil inválido.", "❌");
+                }
             } catch (err) {
-                console.error("Erro ao importar ficheiro.");
+                uiManager.showNotification("Erro ao ler o ficheiro.", "❌");
+                console.error("Erro ao importar ficheiro:", err);
             }
         };
         reader.readAsText(file);
@@ -153,10 +143,13 @@ const WingChunApp = {
         this.elements.seccoes.forEach(seccao => {
             seccao.classList.toggle('visivel', seccao.id === idSeccao);
         });
-        // Lógica para atualizar o botão ativo na navegação (seria do uiManager)
         this.elements.navHub.querySelectorAll('.nav-button').forEach(button => {
             button.classList.toggle('active', button.dataset.seccao === idSeccao);
         });
+        const navItem = NAV_ITEMS.find(item => item.id === idSeccao);
+        if (navItem) {
+            this.elements.mobileHeaderTitle.textContent = navItem.text;
+        }
     },
 
     getBeltByLevel(level) {
